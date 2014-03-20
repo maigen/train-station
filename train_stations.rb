@@ -2,6 +2,8 @@ require 'pg'
 require './lib/line'
 require './lib/station'
 require './lib/stop'
+require 'pry'
+
 DB = PG.connect(:dbname => 'trains')
 
 system "clear"
@@ -65,30 +67,29 @@ end
 
 def add_line
   puts "Enter the name of the new line\n\n"
-  line_name = gets.chomp
-  new_line = Line.new(line_name)
+  line_name = gets.chomp.upcase
+  new_line = Line.new({'name' =>line_name})
   new_line.save
   puts "\n#{line_name} has been added as a new line.\n\n\n"
   conductor_menu
 end
 
 def connect_menu
-  puts "This is a list of current lines. Please enter the number of the line you want to connect a station to.\n"
-  Line.all.each_with_index do |line, index|
-    puts "#{index + 1}" + ". " + "#{line.name}\n"
+  puts "What station would you like to connect?\n\n\n"
+  Station.all.each do |station|
+    puts "\t#{station.name}\n"
   end
-  line = gets.chomp.to_i
-  puts "\n\n"
-  puts "This is a list of current stations.  Please enter the number of the station you want to connect the line to.\n"
-  Station.all.each_with_index do |station, index|
-    puts "#{index + 1}. #{station.name}\n"
+  user_station_name = gets.chomp.upcase
+  this_station = Station.all.detect {|station| station.name == user_station_name}
+  puts "\n\nWhat line would you like to stop at #{user_station_name}?\n\n"
+  Line.all.each do |line|
+    puts "\t#{line.name}\n"
   end
-  station = gets.chomp.to_i
-  new_stop = Stop.new({'station_id' => station, 'line_id' => line})
-  new_stop.save
-  puts "You have added #{Station.all[station-1].name} to the #{Line.all[line-1].name} train line.\n\n"
-  gets.chomp
-  system "clear"
+  user_line_name = gets.chomp.upcase
+  this_line = Line.all.detect {|line| line.name == user_line_name}
+  new_connection = Stop.new({'station_id' => this_station.id, 'line_id' => this_line.id})
+  new_connection.save
+  puts "\nYou have successfully connected the #{this_line.name} to the #{this_station.name}.\n\n"
   conductor_menu
 end
 
@@ -114,6 +115,24 @@ def passenger_menu
     system "clear"
     main_menu
   end
+end
+
+def view_station
+  puts "Which station would you like to view?\n\n"
+    Station.all.each do |station|
+    puts "\t#{station.name}\n"
+  end
+  station_name = gets.chomp.upcase
+
+  chosen_station = Station.all.detect {|station| station.name == station_name }
+  puts chosen_station
+  #something around here is broken
+  id_station = chosen_station.id
+  lines = chosen_station.find_line(id_station)
+  lines
+
+
+
 end
 
 

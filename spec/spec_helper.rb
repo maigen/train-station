@@ -3,6 +3,7 @@ require 'pg'
 require 'station'
 require 'stop'
 require 'rspec'
+require 'pry'
 
 DB = PG.connect(:dbname => 'trains_test')
 RSpec.configure do |config|

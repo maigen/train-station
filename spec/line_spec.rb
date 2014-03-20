@@ -2,7 +2,7 @@ require 'spec_helper'
 
 describe Line do
   describe 'initialize' do
-    it 'is initialized with a name' do
+    it 'is initialized with a hash of attributes' do
       line = Line.new({'name' => 'Red Line'})
       line.should be_an_instance_of Line
     end

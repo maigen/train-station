@@ -32,4 +32,13 @@ describe Station do
       station_1.should eq station_2
     end
   end
+
+  describe 'find_line' do
+    it 'lists the lines that stop at a particular station' do
+    station_1 = Station.new('Sunset Transit Station', 1)
+    line_1 = Line.new({'name' => "RED", 'id' => 2})
+    stop_1 = Stop.new({'station_id' => 1, 'line_id' => 2})
+    station_1.find_line('Sunset Transit Station').should eq 'RED'
+    end
+  end
 end

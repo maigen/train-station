@@ -30,3 +30,4 @@ class Stop
   end
 
 end
+
