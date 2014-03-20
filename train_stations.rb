@@ -118,21 +118,36 @@ def passenger_menu
 end
 
 def view_station
-  puts "Which station would you like to view?\n\n"
+  puts "To view the lines servicing a particular station, please enter the station name.\n\n"
     Station.all.each do |station|
-    puts "\t#{station.name}\n"
-  end
-  station_name = gets.chomp.upcase
+      puts "\t#{station.name}\n"
+    end
+  request = gets.chomp.upcase
+  chosen_station = Station.all.detect { |station| station.name == request }
+  station_id = chosen_station.id.to_i
+  puts "\n\nHere are the train lines that come to this station: "
+  puts "\n\n"
+  puts chosen_station.find_line(station_id)
+  puts "\n\n"
+  gets.chomp
+  system "clear"
+  passenger_menu
+end
 
-  chosen_station = Station.all.detect {|station| station.name == station_name }
-  puts chosen_station
-  #something around here is broken
-  id_station = chosen_station.id
-  lines = chosen_station.find_line(id_station)
-  lines
-
-
-
+def view_line
+  puts "Which line would you like to view stops on?\n\n"
+    Line.all.each do |line|
+      puts "\t#{line.name}\n"
+    end
+  request = gets.chomp.upcase
+  chosen_line = Line.all.detect { |line| line.name == request }
+  line_id = chosen_line.id.to_i
+  puts "\n\n Here are the stations visited by this train line:\n\n"
+  puts chosen_line.find_stations(line_id)
+  puts "\n\n"
+  gets.chomp
+  system "clear"
+  passenger_menu
 end
 
 

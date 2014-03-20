@@ -1,5 +1,4 @@
 require 'pry'
-
 class Station
   attr_reader :name, :id
 
@@ -29,13 +28,15 @@ class Station
   end
 
   def find_line(station_id)
+    line_names_array = []
+    line_ids = DB.exec("SELECT line_id FROM stops WHERE station_id = #{station_id};")
+    line_ids.each do |result|
+      id = result["line_id"]
+      line_names = DB.exec("SELECT name FROM line WHERE id = #{id};")
+      line_names_array << line_names.first['name']
+    end
+    line_names_array
 
-
-    line_ids = DB.exec("Select line_id FROM stops WHERE station_id = #{station_id};")
-
-    #something around here is broken
-    line_results = DB.exec("Select name FROM line WHERE id = #{results.id};")
-    line_results
   end
 
 end

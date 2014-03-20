@@ -27,4 +27,14 @@ class Line
     self.name == another_line.name
   end
 
+  def find_stations(line_id)
+    station_names_array = []
+    station_ids = DB.exec("SELECT station.* FROM line JOIN stops ON (line.id = stops.line_id) JOIN station ON (stops.station_id = station.id) WHERE line.id = 3;")
+    station_ids.each do |result|
+      name = result["name"]
+      station_names_array << name
+    end
+    station_names_array
+  end
+
 end

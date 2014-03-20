@@ -33,4 +33,6 @@ describe Line do
     end
   end
 
+  #this is where a test would go if I was writing a test for 'find_stations'
+
 end
